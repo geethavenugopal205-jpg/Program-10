@@ -1,0 +1,30 @@
+class Solution:
+    def longestSubarray(self, arr, k):
+        # Map to store (prefix_sum: earliest_index)
+        pre_sum_map = {}
+        curr_sum = 0
+        max_length = 0
+        
+        for i in range(len(arr)):
+            curr_sum += arr[i]
+            
+            # Case 1: The prefix sum itself equals k
+            if curr_sum == k:
+                max_length = i + 1
+            
+            # Case 2: Check if (curr_sum - k) has been seen before
+            # If it exists, the subarray between that index and i sums to k
+            rem = curr_sum - k
+            if rem in pre_sum_map:
+                length = i - pre_sum_map[rem]
+                max_length = max(max_length, length)
+            
+            # Only store the prefix sum if it's not already in the map
+            # This keeps the index as small as possible to maximize length
+            if curr_sum not in pre_sum_map:
+                pre_sum_map[curr_sum] = i
+                
+        return max_length
+        
+
+    
